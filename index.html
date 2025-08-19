@@ -4,36 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Virtual Robotic Laboratory</title>
-    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .role-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .role-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .role-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Welcome to Virtual Robotic Laboratory</h1>
-            <p>Please choose an option:</p>
-        </header>
+        <h1>Welcome to Virtual Robotic Laboratory</h1>
+        <p>Please select your user type:</p>
         
-        <main class="lab-options">
-            <div class="lab-card dt-lab">
-                <h2>Virtual Robotic Lab with DT</h2>
-                <p>Digital Twin enabled labs requiring password</p>
-                <button class="lab-btn" onclick="location.href='auth.html'">Enter Lab</button>
-            </div>
-            
-            <div class="divider">
-                <span>or</span>
-            </div>
-            
-            <div class="lab-card standard-lab">
-                <h2>Virtual Robotic Lab</h2>
-                <p>Standard virtual labs without password</p>
-                <button class="lab-btn" onclick="location.href='standard-lab.html'">Enter Lab</button>
-            </div>
-        </main>
-        
-        <footer>
-            <p>© 2023 Virtual Robotic Laboratory</p>
-        </footer>
+        <div class="role-options">
+            <button class="role-btn" onclick="selectRole('Researcher')">Researcher</button>
+            <button class="role-btn" onclick="selectRole('Undergrad Student')">Undergrad Student</button>
+            <button class="role-btn" onclick="selectRole('Developer')">Developer</button>
+            <button class="role-btn" onclick="selectRole('Operator')">Operator</button>
+        </div>
     </div>
+
+    <script>
+        function selectRole(role) {
+            // Store the selected role in session storage
+            sessionStorage.setItem('selectedRole', role);
+            
+            // Redirect to authentication page
+            window.location.href = 'authentication.html';
+        }
+    </script>
 </body>
 </html>
