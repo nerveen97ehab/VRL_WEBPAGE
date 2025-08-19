@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Researcher Portal</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <title>Welcome Researcher</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <!-- prevent caching of protected pages -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="stylesheet" href="style.css" />
   <script src="auth-check.js"></script>
+  <script>guardProtectedPage();</script>
 </head>
-<body onload="checkAuth()">
-  <div class="container">
-    <h1>Welcome Researcher</h1>
-    <button onclick="location.href='dtlab.html'">Enter DT Lab</button>
-    <button onclick="location.href='https://example.com/chatbot'">Enter Chatbot</button>
-    <button onclick="logout()">Logout</button>
-  </div>
+<body>
+  <main class="card">
+    <h2>Welcome Researcher</h2>
+    <p class="sub">Choose a module:</p>
+    <div class="btn-row">
+      <a class="btn" href="dtlab.html">Enter DT Lab</a>
+      <a class="btn" href="https://example.com/chatbot">Enter Chatbot</a>
+    </div>
+    <button class="btn" style="margin-top:18px" onclick="logout()">Logout</button>
+  </main>
 </body>
 </html>
