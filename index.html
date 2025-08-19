@@ -4,10 +4,8 @@
   <meta charset="utf-8" />
   <title>Secure Login</title>
   <meta name="robots" content="noindex,nofollow" />
-  <!-- prevent caching the login page -->
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
+  <meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -22,51 +20,56 @@
   </main>
 
   <script>
-    // Always clear any prior session when viewing login
-    function clearSession(){
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("authExp");
-    }
+    const OTP_API_BASE = "https://<your-vercel-project>.vercel.app"; // set this!
+
+    // clear any prior session
+    function clearSession(){ localStorage.removeItem("authToken"); localStorage.removeItem("authExp"); }
     clearSession();
+    window.addEventListener("pageshow", (e)=>{ if(e.persisted) clearSession(); });
 
-    // If the page is restored from back/forward cache, clear again
-    window.addEventListener("pageshow", (e) => {
-      if (e.persisted) {
-        clearSession();
-        const u = document.getElementById("username");
-        const p = document.getElementById("password");
-        if (u) u.value = "";
-        if (p) p.value = "";
-      }
-    });
+    async function requestLoginOtp() {
+      const fd = new URLSearchParams({ action: "request", purpose: "login" });
+      const r = await fetch(`${OTP_API_BASE}/api/otp`, { method:"POST", body: fd });
+      if (!r.ok) throw new Error("OTP request failed");
+      const data = await r.json(); return data.request_id;
+    }
+    async function verifyLoginOtp(requestId, code) {
+      const fd = new URLSearchParams({ action: "verify", request_id: requestId, code });
+      const r = await fetch(`${OTP_API_BASE}/api/otp`, { method:"POST", body: fd });
+      return r.ok;
+    }
 
-    // Demo login. Replace with real backend when ready.
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
+    document.getElementById("loginForm").addEventListener("submit", async (e)=>{
       e.preventDefault();
       const u = document.getElementById("username").value.trim();
       const p = document.getElementById("password").value;
-
       if (!u || !p) return showErr("Please enter username and password.");
+      // Dummy creds; replace with real backend later if you want
+      if (!(u.toLowerCase()==="researcher" && p==="pass123")) return showErr("Invalid credentials.");
 
-      if (u.toLowerCase() === "researcher" && p === "pass123") {
-        const token = (crypto.randomUUID && crypto.randomUUID())
-          || (Date.now().toString(36) + Math.random().toString(36).slice(2));
-
-        const oneHour = 60 * 60 * 1000;        // change if you want
-        localStorage.setItem("authToken", token);
-        localStorage.setItem("authExp", String(Date.now() + oneHour));
-
-        window.location.href = "researcher.html";
-      } else {
-        showErr("Invalid credentials.");
+      let rid;
+      try {
+        rid = await requestLoginOtp();
+        showErr("A 6-digit code was emailed to the owner. Enter it to continue.");
+      } catch {
+        return showErr("Could not send OTP. Try again.");
       }
+      const code = prompt("Enter the 6-digit code:");
+      if (!code) return;
+
+      const ok = await verifyLoginOtp(rid, code.trim());
+      if (!ok) return showErr("Wrong/expired code. Please login again.");
+
+      // OTP ok → create session token and go
+      const token = (crypto.randomUUID && crypto.randomUUID())
+        || (Date.now().toString(36) + Math.random().toString(36).slice(2));
+      const oneHour = 60*60*1000;
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("authExp", String(Date.now() + oneHour));
+      window.location.href = "researcher.html";
     });
 
-    function showErr(msg){
-      const el = document.getElementById("err");
-      el.textContent = msg;
-      el.style.display = "block";
-    }
+    function showErr(msg){ const el=document.getElementById("err"); el.textContent=msg; el.style.display="block"; }
   </script>
 </body>
 </html>
