@@ -5,45 +5,22 @@
   <title>DT Lab Selection</title>
   <meta name="robots" content="noindex,nofollow" />
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-  <meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <link rel="stylesheet" href="style.css" />
   <script src="auth-check.js"></script>
   <script>guardProtectedPage();</script>
-  <style>
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:50}
-    .modal{background:linear-gradient(180deg,#1b2029,#151a22);border:1px solid rgba(255,255,255,.06);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.55);padding:22px;width:min(520px,92vw)}
-    .row{display:grid;gap:10px;margin-top:10px}
-    .small{font-size:.9rem}
-  </style>
 </head>
 <body>
   <main class="card">
     <h2>Select a Digital Twin Lab</h2>
-    <p class="sub">You’ll receive a one-time code before entering a lab.</p>
-
+    <p class="sub">Choose a lab to open:</p>
     <div class="btn-row">
-      <button class="btn" onclick="openOtp('lab1')">Lab 1</button>
-      <button class="btn" onclick="openOtp('lab2')">Lab 2</button>
+      <!-- Replace with your real public URLs -->
+      <a class="btn" href="http://localhost:8091" target="_blank" rel="noopener">Lab 1</a>
+      <a class="btn" href="http://localhost:8093" target="_blank" rel="noopener">Lab 2</a>
     </div>
     <button class="btn" style="margin-top:18px" onclick="logout()">Logout</button>
   </main>
-
-  <div id="otpModal" class="modal-backdrop">
-    <div class="modal">
-      <h2 id="otpTitle" style="text-align:center;color:#9ac3ff;margin:0 0 6px">Lab Access</h2>
-      <p class="sub small" style="margin-bottom:8px">A 6-digit code was emailed to the owner. Enter it.</p>
-      <div class="row">
-        <input id="otpInput" class="input" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Enter 6-digit code">
-        <button id="otpVerifyBtn" class="btn" onclick="verifyOtp()">Verify & Continue</button>
-        <p id="otpMsg" class="warn" style="display:none"></p>
-      </div>
-      <div class="row" style="grid-template-columns:1fr 1fr">
-        <button class="btn" onclick="requestOtpAgain()">Resend Code</button>
-        <button class="btn" onclick="closeOtp()">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="otp.js"></script>
 </body>
 </html>
