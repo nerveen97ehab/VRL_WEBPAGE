@@ -1,146 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Robotic Laboratory</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        
-        .container {
-            text-align: center;
-            max-width: 800px;
-            padding: 40px;
-        }
-        
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-        }
-        
-        .lab-options {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            margin-top: 40px;
-        }
-        
-        .lab-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .lab-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-        
-        .lab-card h2 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        
-        .lab-card p {
-            color: #7f8c8d;
-            margin-bottom: 20px;
-        }
-        
-        .lab-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .lab-btn:hover {
-            background-color: #2980b9;
-        }
-        
-        .divider {
-            display: flex;
-            align-items: center;
-            color: #7f8c8d;
-            margin: 10px 0;
-        }
-        
-        .divider::before, .divider::after {
-            content: "";
-            flex: 1;
-            border-bottom: 1px solid #bdc3c7;
-        }
-        
-        .divider span {
-            padding: 0 15px;
-        }
-        
-        footer {
-            margin-top: 50px;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Welcome to Virtual Robotic Laboratory</h1>
-            <p>Please select your access option:</p>
-        </header>
-        
-        <main class="lab-options">
-            <div class="lab-card dt-lab">
-                <h2>Virtual Robotic Lab with DT</h2>
-                <p>Digital Twin enabled labs requiring authentication</p>
-                <button class="lab-btn" id="dtLabBtn">Enter Lab</button>
-            </div>
-            
-            <div class="divider">
-                <span>or</span>
-            </div>
-            
-            <div class="lab-card standard-lab">
-                <h2>Virtual Robotic Lab</h2>
-                <p>Standard virtual labs without authentication</p>
-                <button class="lab-btn" onclick="location.href='standard-lab.html'">Enter Lab</button>
-            </div>
-        </main>
-        
-        <footer>
-            <p>© 2023 Virtual Robotic Laboratory | Secure Access System</p>
-        </footer>
-    </div>
+  <div class="container">
+    <h1>Login</h1>
+    <input type="text" id="username" placeholder="Username"><br><br>
+    <input type="password" id="password" placeholder="Password"><br><br>
+    <button onclick="login()">Login</button>
+    <p id="error" style="color:red;"></p>
+  </div>
 
-    <script>
-        document.getElementById('dtLabBtn').addEventListener('click', function() {
-            // Prompt user to select a role
-            const role = prompt("Please select your role:\n1. Researcher\n2. Undergrad Student\n3. Developer\n4. Operator", "Researcher");
-            
-            if (role) {
-                // Store the selected role
-                sessionStorage.setItem('selectedRole', role);
-                
-                // Redirect to authentication page
-                window.location.href = 'auth.html';
-            }
-        });
-    </script>
+  <script>
+    function login() {
+      let user = document.getElementById("username").value;
+      let pass = document.getElementById("password").value;
+      if (user === "researcher" && pass === "pass123") {
+        window.location.href = "researcher.html";
+      } else {
+        document.getElementById("error").innerText = "Invalid credentials";
+      }
+    }
+  </script>
 </body>
 </html>
