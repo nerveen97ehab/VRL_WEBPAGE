@@ -1,35 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <title>Secure Login</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <!-- prevent caching the login page -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Secure Login</h1>
-    <input type="text" id="username" placeholder="Username"><br><br>
-    <input type="password" id="password" placeholder="Password"><br><br>
-    <button onclick="login()">Login</button>
-    <p id="error" style="color:red;"></p>
-  </div>
+  <main class="card">
+    <h2>Secure Login</h2>
+    <form id="loginForm" class="center" autocomplete="off">
+      <input class="input" id="username" name="username" placeholder="Username" required autocomplete="off" />
+      <input class="input" id="password" name="password" type="password" placeholder="Password" required autocomplete="new-password" />
+      <button class="btn" type="submit">Login</button>
+      <p id="err" class="warn" style="display:none;"></p>
+    </form>
+  </main>
 
   <script>
-    function login() {
-      let user = document.getElementById("username").value;
-      let pass = document.getElementById("password").value;
+    // Always clear any prior session when viewing login
+    function clearSession(){
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("authExp");
+    }
+    clearSession();
 
-      // Replace with your own credentials or fetch from an API if you add a backend
-      if (user === "researcher" && pass === "pass123") {
-        // Generate a "token" (just a random string for demo)
-        const token = Math.random().toString(36).substring(2);
+    // If the page is restored from back/forward cache, clear again
+    window.addEventListener("pageshow", (e) => {
+      if (e.persisted) {
+        clearSession();
+        const u = document.getElementById("username");
+        const p = document.getElementById("password");
+        if (u) u.value = "";
+        if (p) p.value = "";
+      }
+    });
+
+    // Demo login. Replace with real backend when ready.
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const u = document.getElementById("username").value.trim();
+      const p = document.getElementById("password").value;
+
+      if (!u || !p) return showErr("Please enter username and password.");
+
+      if (u.toLowerCase() === "researcher" && p === "pass123") {
+        const token = (crypto.randomUUID && crypto.randomUUID())
+          || (Date.now().toString(36) + Math.random().toString(36).slice(2));
+
+        const oneHour = 60 * 60 * 1000;        // change if you want
         localStorage.setItem("authToken", token);
+        localStorage.setItem("authExp", String(Date.now() + oneHour));
 
-        // Redirect
         window.location.href = "researcher.html";
       } else {
-        document.getElementById("error").innerText = "Invalid credentials";
+        showErr("Invalid credentials.");
       }
+    });
+
+    function showErr(msg){
+      const el = document.getElementById("err");
+      el.textContent = msg;
+      el.style.display = "block";
     }
   </script>
 </body>
