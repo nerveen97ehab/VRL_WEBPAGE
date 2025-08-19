@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Robotic Laboratory</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to Virtual Robotic Laboratory</h1>
+            <p>Please choose an option:</p>
+        </header>
+        
+        <main class="lab-options">
+            <div class="lab-card dt-lab">
+                <h2>Virtual Robotic Lab with DT</h2>
+                <p>Digital Twin enabled labs requiring password</p>
+                <button class="lab-btn" onclick="location.href='auth.html'">Enter Lab</button>
+            </div>
+            
+            <div class="divider">
+                <span>or</span>
+            </div>
+            
+            <div class="lab-card standard-lab">
+                <h2>Virtual Robotic Lab</h2>
+                <p>Standard virtual labs without password</p>
+                <button class="lab-btn" onclick="location.href='standard-lab.html'">Enter Lab</button>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2023 Virtual Robotic Laboratory</p>
+        </footer>
+    </div>
+</body>
+</html>
