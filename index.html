@@ -7,7 +7,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Login</h1>
+    <h1>Secure Login</h1>
     <input type="text" id="username" placeholder="Username"><br><br>
     <input type="password" id="password" placeholder="Password"><br><br>
     <button onclick="login()">Login</button>
@@ -18,7 +18,14 @@
     function login() {
       let user = document.getElementById("username").value;
       let pass = document.getElementById("password").value;
+
+      // Replace with your own credentials or fetch from an API if you add a backend
       if (user === "researcher" && pass === "pass123") {
+        // Generate a "token" (just a random string for demo)
+        const token = Math.random().toString(36).substring(2);
+        localStorage.setItem("authToken", token);
+
+        // Redirect
         window.location.href = "researcher.html";
       } else {
         document.getElementById("error").innerText = "Invalid credentials";
