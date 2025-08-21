@@ -1,78 +1,39 @@
-(dark card + blue) ===== */
-:root{
---bg-1:#0b0e13; --bg-2:#131821;
---card-1:#1b2029; --card-2:#151a22;
---text:#e9f1ff; --muted:#a9b6cc;
---primary:#2f80ed; --primary-600:#2b74d6;
---input-bg:#dbeeff; --radius:20px;
---glow:0 12px 40px rgba(47,128,237,.35);
+"use strict";
+// --- simple token auth for static hosting (GitHub Pages or similar) ---
+
+
+function isAuthed() {
+const token = localStorage.getItem("authToken");
+const exp = Number(localStorage.getItem("authExp"));
+return Boolean(token) && Number.isFinite(exp) && Date.now() <= exp;
 }
 
 
-*{box-sizing:border-box} html,body{height:100%}
-body{
-margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-color:var(--text);
-background:
-radial-gradient(1200px 600px at 50% -10%, #1c2736 0%, transparent 60%),
-linear-gradient(160deg,var(--bg-1) 0%,var(--bg-2) 60%, var(--bg-1) 100%);
-display:grid; place-items:center; padding:24px;
-}
-.card{
-width:min(820px,95vw);
-background:
-radial-gradient(800px 400px at 100% -80%, rgba(47,128,237,.07), transparent 60%),
-linear-gradient(180deg, var(--card-1) 0%, var(--card-2) 100%);
-border:1px solid rgba(255,255,255,.06);
-border-radius:var(--radius);
-box-shadow:0 8px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.02), var(--glow);
-padding:clamp(22px,4vw,44px);
+function forceToLogin() {
+// replace() prevents forward-button returning to protected page
+window.location.replace("./login.html");
 }
 
 
-h1,h2{
-text-align:center; margin:0 0 18px; color:#9ac3ff; letter-spacing:.3px;
-text-shadow:0 1px 0 rgba(0,0,0,.35);
+function logout() {
+try {
+localStorage.removeItem("authToken");
+localStorage.removeItem("authExp");
+} finally {
+forceToLogin();
+}
 }
 
 
-p.sub{margin:0 0 22px; text-align:center; color:var(--muted)}
+/** Call on every protected page ASAP (in <head>) */
+function guardProtectedPage() {
+const run = () => { if (!isAuthed()) forceToLogin(); };
 
 
-.label{display:block; font-size:.95rem; margin:10px 0 6px; color:#cfe0ff}
-
-
-.input{
-width:100%; background:var(--input-bg); color:#0f1720; border:none;
-border-radius:12px; padding:14px 16px; font-size:16px;
-outline:2px solid transparent; transition:outline-color .15s, filter .15s;
-box-shadow:inset 0 -1px 0 rgba(0,0,0,.08);
+run(); // initial check (including cold load)
+window.addEventListener("pageshow", run); // handles bfcache restores
+document.addEventListener("visibilitychange", () => {
+if (document.visibilityState === "visible") run();
+});
+window.addEventListener("storage", run); // other tabs logging out
 }
-.input::placeholder{color:#6a7b8f}
-.input:focus{outline-color:#7fb4ff; filter:brightness(1.02)}
-.input + .input{margin-top:14px}
-
-
-.btn{
-display:flex; align-items:center; justify-content:center; width:100%;
-padding:14px 18px; margin-top:18px; border-radius:14px;
-border:1px solid rgba(255,255,255,.06); font-weight:700; color:#fff;
-background:linear-gradient(180deg, var(--primary), var(--primary-600));
-cursor:pointer; box-shadow:var(--glow);
-transition:transform .08s, filter .2s, box-shadow .2s; text-decoration:none;
-}
-.btn[disabled]{opacity:.65; cursor:not-allowed; filter:grayscale(.2)}
-.btn:hover:not([disabled]){transform:translateY(-1px); filter:brightness(1.05);
-box-shadow:0 16px 44px rgba(47,128,237,.45)}
-.btn:active{transform:translateY(0)}
-
-
-.btn-row{display:grid; grid-template-columns:1fr; gap:14px; margin-top:10px}
-@media (min-width:560px){.btn-row{grid-template-columns:1fr 1fr}}
-
-
-.warn{color:#ffb9b9; text-align:center; margin-top:10px}
-.center{text-align:center}
-
-
-.small{font-size:.9rem; color:var(--muted); text-align:center; margin-top:8px}
